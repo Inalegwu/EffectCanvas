@@ -127,16 +127,6 @@ export const AnimationControls: React.FC<AnimationControlsProps> = ({
     animationControls.queueAnimation(from, to, animationConfig);
   }, [images, animationControls, animationConfig]);
 
-  // onChange={(e) =>
-  //           setAnimationConfig(
-  //             (prev) =>
-  //               new Types.AnimationConfig({
-  //                 ...prev,
-  //                 type: e.target.value as Types.AnimationConfig['type'],
-  //               }),
-  //           )
-  //         }
-
   return (
     <div className="flex flex-col w-full gap-2 overflow-y-scroll pb-2">
       <h3 className="text-neutral-400 text-sm mx-3">Animation Controls</h3>
@@ -176,7 +166,7 @@ export const AnimationControls: React.FC<AnimationControlsProps> = ({
                 <Select.List>
                   {animationTypes.map((item) => (
                     <Select.Item
-                      className="flex items-center justify-between gap-2 text-xs border-b border-b-solid border-b-neutral-900 p-2"
+                      className="flex items-center hover:bg-neutral-900/50 cursor-pointer justify-between gap-2 text-xs border-b border-b-solid border-b-neutral-900 p-2"
                       key={item.label}
                       value={item.value}
                     >
@@ -263,7 +253,7 @@ export const AnimationControls: React.FC<AnimationControlsProps> = ({
                 <Select.List>
                   {easingFunctions.map((item) => (
                     <Select.Item
-                      className="flex items-center justify-between gap-2 text-xs border-b border-b-solid border-b-neutral-900 p-2"
+                      className="flex items-center hover:bg-neutral-900/50 cursor-pointer justify-between gap-2 text-xs border-b border-b-solid border-b-neutral-900 p-2"
                       key={item.label}
                       value={item.value}
                     >

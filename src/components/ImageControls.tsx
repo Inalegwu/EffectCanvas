@@ -187,7 +187,7 @@ export const ImageControls: React.FC<ImageControlsProps> = ({
                     <Select.List>
                       {filters.map((item) => (
                         <Select.Item
-                          className="flex items-center justify-between gap-2 text-xs border-b border-b-solid border-b-neutral-900 p-2"
+                          className="flex items-center hover:bg-neutral-900/50 cursor-pointer justify-between gap-2 text-xs border-b border-b-solid border-b-neutral-900 p-2"
                           key={item.label}
                           value={item.value}
                         >
@@ -294,7 +294,7 @@ export const ImageControls: React.FC<ImageControlsProps> = ({
                     <Select.List>
                       {scaleModes.map((item) => (
                         <Select.Item
-                          className="flex items-center justify-between gap-2 text-xs border-b border-b-solid border-b-neutral-900 p-2"
+                          className="flex items-center hover:bg-neutral-900/50 cursor-pointer justify-between gap-2 text-xs border-b border-b-solid border-b-neutral-900 p-2"
                           key={item.label}
                           value={item.value}
                         >
