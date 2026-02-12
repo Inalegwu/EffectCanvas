@@ -1,10 +1,29 @@
-@import url("https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap");
 @import "tailwindcss";
 
+@font-face {
+  font-family: Geist;
+  src: url("./assets/fonts/geist.ttf");
+}
+
 @theme {
-  --font-display: "Raleway", "sans-serif";
+  --font-display: "Geist", "sans-serif";
+  --color-accent-50: #d7fff5;
+--color-accent-100: #b1f9e8;
+--color-accent-200: #a3ebda;
+--color-accent-300: #7cc3b3;
+--color-accent-400: #5ca293;
+--color-accent-500: #3c8374;
+--color-accent-600: #266e61;
+--color-accent-700: #0a5b4e;
+--color-accent-800: #03463c;
+--color-accent-900: #01332a;
+--color-accent-950: #01201a;
 }
 
 body {
-  @apply bg-neutral-100 font-display font-medium;
+  @apply bg-black text-neutral-200 font-display font-medium;
+}
+
+button{
+  @apply cursor-pointer;
 }

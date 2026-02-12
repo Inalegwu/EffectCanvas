@@ -1,12 +1,54 @@
-import React, { useCallback, useState } from 'react';
+import { DangerTriangle } from '@solar-icons/react';
+import type React from 'react';
+import { useCallback, useState } from 'react';
 import * as Types from '../canvas/types';
 import { useCanvasRendererContext } from '../contexts/CanvasRendererContext';
+
+type Easings = {
+  label: string;
+  value: Types.AnimationConfig['easing'];
+};
 
 interface AnimationControlsProps {
   images: Types.ImageSource[];
   onAnimationStart?: () => void;
   onAnimationEnd?: () => void;
 }
+
+const easingFunctions: Array<Easings> = [
+  {
+    label: 'Ease In/Out Quad',
+    value: 'easeInOutQuad',
+  },
+  {
+    label: 'Ease In Cubic',
+    value: 'easeInCubic',
+  },
+  {
+    label: 'Ease In/Out Cubic',
+    value: 'easeInOutCubic',
+  },
+  {
+    label: 'Ease In Quad',
+    value: 'easeInQuad',
+  },
+  {
+    label: 'Ease Out Cubic',
+    value: 'easeOutCubic',
+  },
+  {
+    label: 'Ease Out Quad',
+    value: 'easeOutQuad',
+  },
+  {
+    label: 'Linear',
+    value: 'linear',
+  },
+  {
+    label: 'Spring',
+    value: 'spring',
+  },
+];
 
 export const AnimationControls: React.FC<AnimationControlsProps> = ({
   images,
@@ -53,20 +95,10 @@ export const AnimationControls: React.FC<AnimationControlsProps> = ({
   }, [images, animationControls, animationConfig]);
 
   return (
-    <div
-      className="animation-controls"
-      style={{
-        padding: '20px',
-        backgroundColor: '#e9ecef',
-        borderRadius: '8px',
-      }}
-    >
-      <h3 style={{ marginBottom: '15px' }}>Animation Controls</h3>
-
-      <div style={{ marginBottom: '15px' }}>
-        <label style={{ display: 'block', marginBottom: '5px' }}>
-          Animation Type:
-        </label>
+    <div className="flex flex-col w-full gap-2 overflow-y-scroll pb-2">
+      <h3 className="text-neutral-400 text-sm mx-3">Animation Controls</h3>
+      <div className="my-1 px-3 py-2 mx-3 gap-4 border border-dotted border-neutral-900 flex items-center justify-between">
+        <p className="text-xs text-neutral-500">Animation Type</p>
         <select
           value={animationConfig.type}
           onChange={(e) =>
@@ -78,7 +110,6 @@ export const AnimationControls: React.FC<AnimationControlsProps> = ({
                 }),
             )
           }
-          style={{ width: '100%', padding: '5px' }}
         >
           <option value="fade">Fade</option>
           <option value="slide">Slide</option>
@@ -88,10 +119,10 @@ export const AnimationControls: React.FC<AnimationControlsProps> = ({
         </select>
       </div>
 
-      <div style={{ marginBottom: '15px' }}>
-        <label style={{ display: 'block', marginBottom: '5px' }}>
+      <div className="my-1 px-3 py-2 mx-3 gap-4 border border-dotted border-neutral-900 flex items-center justify-between">
+        <p className="text-xs text-neutral-500">
           Duration: {animationConfig.duration}ms
-        </label>
+        </p>
         <input
           type="range"
           min="100"
@@ -107,12 +138,10 @@ export const AnimationControls: React.FC<AnimationControlsProps> = ({
                 }),
             )
           }
-          style={{ width: '100%' }}
         />
       </div>
-
-      <div style={{ marginBottom: '15px' }}>
-        <label style={{ display: 'block', marginBottom: '5px' }}>Easing:</label>
+      <div className="my-1 px-3 py-2 mx-3 gap-4 border border-dotted border-neutral-900 flex items-center justify-between">
+        <p className="text-xs text-neutral-500">Easing</p>
         <select
           value={animationConfig.easing}
           onChange={(e) =>
@@ -124,7 +153,6 @@ export const AnimationControls: React.FC<AnimationControlsProps> = ({
                 }),
             )
           }
-          style={{ width: '100%', padding: '5px' }}
         >
           <option value="linear">Linear</option>
           <option value="easeInQuad">Ease In Quad</option>
@@ -133,84 +161,46 @@ export const AnimationControls: React.FC<AnimationControlsProps> = ({
           <option value="spring">Spring</option>
         </select>
       </div>
-
-      <div style={{ marginBottom: '15px' }}>
-        <label style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <input
-            type="checkbox"
-            checked={animationConfig.loop}
-            onChange={(e) =>
-              setAnimationConfig(
-                (prev) =>
-                  new Types.AnimationConfig({
-                    ...prev,
-                    loop: e.target.checked,
-                  }),
-              )
-            }
-          />
-          Loop Animation
-        </label>
+      <div className="my-1 px-3 py-2 mx-3 gap-4 border border-dotted border-neutral-900 flex items-center justify-between">
+        <p className="text-xs text-neutral-500">Loop Animation</p>
+        <input
+          type="checkbox"
+          checked={animationConfig.loop}
+          onChange={(e) =>
+            setAnimationConfig(
+              (prev) =>
+                new Types.AnimationConfig({
+                  ...prev,
+                  loop: e.target.checked,
+                }),
+            )
+          }
+        />
       </div>
-
-      <div style={{ display: 'flex', gap: '10px', marginBottom: '15px' }}>
+      <div className="my-1 px-3 py-2 mx-3 gap-4 border border-dotted border-neutral-900 flex items-center justify-between">
         <button
+          className="text-xs text-neutral-300"
           onClick={handleStartAnimation}
           disabled={animationControls.isAnimating}
-          style={{
-            padding: '10px 15px',
-            backgroundColor: animationControls.isAnimating
-              ? '#6c757d'
-              : '#007acc',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: animationControls.isAnimating ? 'not-allowed' : 'pointer',
-            flex: 1,
-          }}
         >
           {animationControls.isAnimating ? 'Animating...' : 'Start Animation'}
         </button>
-
         <button
+          className="text-xs text-accent-600"
           onClick={handleQueueAnimation}
-          style={{
-            padding: '10px 15px',
-            backgroundColor: '#28a745',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            flex: 1,
-          }}
         >
           Queue Animation
         </button>
       </div>
-
       {animationControls.animationQueue.length > 0 && (
-        <div
-          style={{
-            marginTop: '10px',
-            padding: '10px',
-            backgroundColor: '#fff',
-            borderRadius: '4px',
-          }}
-        >
+        <div className="my-1 px-3 py-2 mx-3 text-neutral-500 border border-dotted border-neutral-900 flex items-center justify-between gap-2 text-xs">
+          <DangerTriangle size={14} weight="Bold" />
           <div>
             Queue: {animationControls.animationQueue.length} animations pending
           </div>
           <button
+            className="text-red-700 underline italic underline-offset-1"
             onClick={animationControls.clearQueue}
-            style={{
-              marginTop: '10px',
-              padding: '5px 10px',
-              backgroundColor: '#dc3545',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-            }}
           >
             Clear Queue
           </button>

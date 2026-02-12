@@ -1,5 +1,16 @@
-import React, { useCallback, useState } from 'react';
-import * as Types from '../canvas/types';
+import { Button, Checkbox, Slider } from '@base-ui/react';
+import { Field } from '@base-ui/react/field';
+import { Select } from '@base-ui/react/select';
+import { Toggle } from '@base-ui/react/toggle';
+import { ToggleGroup } from '@base-ui/react/toggle-group';
+import {
+  AltArrowDown,
+  CheckCircle,
+  SquareAltArrowDown,
+} from '@solar-icons/react';
+import type React from 'react';
+import { useCallback, useState } from 'react';
+import type * as Types from '../canvas/types';
 import { useCanvasAPI } from '../contexts/CanvasRendererContext';
 
 interface ImageControlsProps {
@@ -8,6 +19,52 @@ interface ImageControlsProps {
   showFilters?: boolean;
   showConfig?: boolean;
 }
+
+const filters = [
+  {
+    label: 'Brightness',
+    value: 'brightness',
+  },
+  {
+    label: 'Contrast',
+    value: 'contrast',
+  },
+  {
+    label: 'Saturation',
+    value: 'saturation',
+  },
+  {
+    label: 'Grayscale',
+    value: 'grayscale',
+  },
+  {
+    label: 'Blur',
+    value: 'blur',
+  },
+  {
+    label: 'Sepia',
+    value: 'sepia',
+  },
+  {
+    label: 'Hue',
+    value: 'hue',
+  },
+];
+
+const scaleModes = [
+  {
+    label: 'Contain',
+    value: 'contain',
+  },
+  {
+    label: 'Cover',
+    value: 'cover',
+  },
+  {
+    label: 'Stretch',
+    value: 'stretch',
+  },
+];
 
 export const ImageControls: React.FC<ImageControlsProps> = ({
   images = [],
@@ -60,188 +117,249 @@ export const ImageControls: React.FC<ImageControlsProps> = ({
   }, [takeScreenshot]);
 
   return (
-    <div
-      className="image-controls"
-      style={{
-        padding: '20px',
-        backgroundColor: '#f5f5f5',
-        borderRadius: '8px',
-      }}
-    >
-      <div style={{ marginBottom: '20px' }}>
-        <h3 style={{ marginBottom: '10px' }}>Images</h3>
-        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+    <div className="flex flex-col w-full h-full gap-2 overflow-hidden">
+      <div className="my-1 px-3 py-2 mx-3 gap-4 border border-dotted border-neutral-900">
+        <div className="w-full flex items-center justify-between">
+          <h3 className="font-medium text-sm text-neutral-400">Images</h3>
+          <Button>
+            <SquareAltArrowDown
+              size={18}
+              weight="Bold"
+              className="text-neutral-500"
+            />
+          </Button>
+        </div>
+        <ToggleGroup
+          defaultValue={[currentImage?.url || '']}
+          className="mt-3 mb-1 overflow-x-scroll"
+        >
           {images.map((image, index) => (
-            <button
-              key={index}
+            <Toggle
+              aria-label="ImageToggle"
+              type="button"
+              key={image.url}
+              value={image.url}
+              className="px-2 py-1 text-xs mx-1 border border-solid border-neutral-900 focus-visible:bg-none focus-visible:outline-2 focus-visible:-outline-offset-1 active:bg-neutral-900 data-pressed:bg-neutral-900 data-pressed:text-neutral-300"
               onClick={() => handleImageSelect(image)}
-              style={{
-                padding: '8px 12px',
-                backgroundColor:
-                  currentImage?.url === image.url ? '#007acc' : '#ddd',
-                color: currentImage?.url === image.url ? 'white' : '#333',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-              }}
             >
               Image {index + 1}
-            </button>
+            </Toggle>
           ))}
-        </div>
+        </ToggleGroup>
       </div>
-
       {showFilters && (
-        <div style={{ marginBottom: '20px' }}>
-          <h3 style={{ marginBottom: '10px' }}>Filters</h3>
-          <div
-            style={{
-              display: 'flex',
-              gap: '10px',
-              alignItems: 'center',
-              marginBottom: '10px',
-            }}
-          >
-            <select
-              value={selectedFilter}
-              onChange={(e) =>
-                setSelectedFilter(e.target.value as Types.ImageFilter['type'])
+        <Field.Root className="my-1 px-3 py-2 mx-3 gap-4 border border-dotted border-neutral-900 overflow-hidden">
+          <div className="flex w-full items-center justify-between">
+            <Field.Label className="font-medium text-sm text-neutral-400">
+              Filters
+            </Field.Label>
+            <Button>
+              <SquareAltArrowDown
+                size={18}
+                weight="Bold"
+                className="text-neutral-500"
+              />
+            </Button>
+          </div>
+          <div className="flex my-2 items-center gap-4 justify-between w-full">
+            <Select.Root
+              onValueChange={(value) =>
+                setSelectedFilter(value as Types.ImageFilter['type'])
               }
-              style={{ padding: '5px', borderRadius: '4px' }}
+              defaultValue={selectedFilter}
+              items={filters}
             >
-              <option value="brightness">Brightness</option>
-              <option value="contrast">Contrast</option>
-              <option value="saturation">Saturation</option>
-              <option value="grayscale">Grayscale</option>
-              <option value="blur">Blur</option>
-              <option value="sepia">Sepia</option>
-              <option value="hue">Hue</option>
-            </select>
-
-            <input
-              type="range"
-              min="0"
-              max="5"
-              step="0.1"
-              value={filterValue}
-              onChange={(e) => setFilterValue(parseFloat(e.target.value))}
-              style={{ flex: 1 }}
-            />
-
-            <span style={{ minWidth: '40px' }}>{filterValue.toFixed(1)}</span>
-
-            <button
+              <Select.Trigger className="border gap-3 border-solid border-neutral-900 flex items-center justify-center text-neutral-300 px-3 py-1">
+                <Select.Value
+                  className="data-placeholder:opacity-60 text-xs"
+                  placeholder="Filter"
+                />
+                <AltArrowDown size={13} />
+              </Select.Trigger>
+              <Select.Portal>
+                <Select.Positioner
+                  className="outline-none select-none z-20"
+                  sideOffset={8}
+                >
+                  <Select.ScrollUpArrow />
+                  <Select.Popup className="group min-w-(--anchor-width) origin-(--transform-origin) bg-clip-padding bg-black text-neutral-300 shadow-lg shadow-neutral-700 outline outline-neutral-900 data-ending-style:scale-90 data-ending-style:opacity-0 data-[side=none]:min-w-[calc(var(--anchor-width)+1rem)] data-[side=none]:data-ending-style:transition-none data-starting-style:scale-90 data-starting-style:opacity-0 data-side-none:data-starting-style:scale-100 data-side=none:data-starting-style:opacity-100 data-side-none:data-starting-style:transition-none dark:shadow-none dark:outline-neutral-900">
+                    <Select.Arrow />
+                    <Select.List>
+                      {filters.map((item) => (
+                        <Select.Item
+                          className="flex items-center justify-between gap-2 text-xs border-b border-b-solid border-b-neutral-900 p-2"
+                          key={item.label}
+                          value={item.value}
+                        >
+                          <Select.ItemText>{item.label}</Select.ItemText>
+                          <Select.ItemIndicator>
+                            <CheckCircle
+                              weight="Bold"
+                              className="text-accent-500"
+                              size={12}
+                            />
+                          </Select.ItemIndicator>
+                        </Select.Item>
+                      ))}
+                    </Select.List>
+                  </Select.Popup>
+                  <Select.ScrollDownArrow />
+                </Select.Positioner>
+              </Select.Portal>
+            </Select.Root>
+            <Slider.Root
+              defaultValue={filterValue}
+              onValueChange={(e) => setFilterValue(e)}
+              className="w-full"
+              min={0}
+              max={5}
+              step={0.1}
+            >
+              <Slider.Value className="text-xs text-neutral-500 mb-2" />
+              <Slider.Control className="flex w-full touch-none items-center select-none">
+                <Slider.Track className="h-1 w-full bg-neutral-900 shadow-[inset_0_0_0_1px] shadow-neutral-800 select-none">
+                  <Slider.Indicator className="bg-neutral-700 select-none" />
+                  <Slider.Thumb
+                    aria-label="amount"
+                    className="size-3 rounded-full bg-white outline outline-gray-300 select-none has-focus-visible:outline has-focus-visible:outline-blue-800"
+                  />
+                </Slider.Track>
+              </Slider.Control>
+            </Slider.Root>
+          </div>
+          <div className="flex items-center justify-start gap-3 mt-3">
+            <Button
+              className="px-3 py-1 border border-solid border-neutral-900 text-xs"
               onClick={handleFilterApply}
-              style={{
-                padding: '5px 10px',
-                backgroundColor: '#28a745',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-              }}
             >
               Apply
-            </button>
-
-            <button
+            </Button>
+            <Button
+              className="px-3 py-1 border border-solid border-neutral-900 text-xs"
               onClick={clearFilters}
-              style={{
-                padding: '5px 10px',
-                backgroundColor: '#dc3545',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: 'pointer',
-              }}
             >
               Clear
-            </button>
+            </Button>
           </div>
-        </div>
+        </Field.Root>
       )}
-
       {showConfig && (
-        <div style={{ marginBottom: '20px' }}>
-          <h3 style={{ marginBottom: '10px' }}>Configuration</h3>
-
-          <div style={{ marginBottom: '10px' }}>
-            <label style={{ display: 'block', marginBottom: '5px' }}>
-              Background Color:
-            </label>
+        <div className="my-1 px-3 py-2 mx-3 gap-4 border border-dotted border-neutral-900">
+          <div className="w-full flex items-center justify-between">
+            <h3 className="font-medium text-sm text-neutral-400">
+              Configuration
+            </h3>
+            <Button>
+              <SquareAltArrowDown
+                size={18}
+                weight="Bold"
+                className="text-neutral-500"
+              />
+            </Button>
+          </div>
+          <div className="flex items-center justify-between my-2">
+            <p className="text-xs text-neutral-400">Background Color:</p>
             <input
               type="color"
               value={config.backgroundColor}
+              className="bg-none border border-solid border-neutral-900"
               onChange={(e) => setBackgroundColor(e.target.value)}
-              style={{ width: '100%', padding: '5px' }}
             />
           </div>
-
-          <div style={{ marginBottom: '10px' }}>
-            <label style={{ display: 'block', marginBottom: '5px' }}>
-              Scale Mode:
-            </label>
-            <select
-              value={config.scaleMode}
-              onChange={(e) =>
-                setScaleMode(
-                  e.target.value as Types.RendererConfig['scaleMode'],
-                )
+          <Field.Root className="flex items-center justify-between my-2">
+            <Field.Label className="text-xs text-neutral-400">
+              Scale Mode
+            </Field.Label>
+            <Select.Root
+              onValueChange={(value) =>
+                setScaleMode(value as Types.RendererConfig['scaleMode'])
               }
-              style={{ width: '100%', padding: '5px' }}
+              items={scaleModes}
             >
-              <option value="contain">Contain</option>
-              <option value="cover">Cover</option>
-              <option value="stretch">Stretch</option>
-            </select>
-          </div>
-
-          <div style={{ marginBottom: '10px' }}>
-            <label style={{ display: 'block', marginBottom: '5px' }}>
-              Preserve Aspect Ratio:
-              <input
-                type="checkbox"
-                checked={config.preserveAspectRatio}
-                onChange={() =>
-                  console.log('TODO: Implement preserveAspectRatio toggle')
-                }
-                style={{ marginLeft: '10px' }}
-              />
-            </label>
+              <Select.Trigger className="border gap-3 border-solid border-neutral-900 flex items-center justify-center text-neutral-300 px-3 py-1">
+                <Select.Value
+                  className="data-placeholder:opacity-60 text-xs"
+                  placeholder="Scale Mode"
+                />
+                <AltArrowDown size={13} />
+              </Select.Trigger>
+              <Select.Portal>
+                <Select.Positioner
+                  className="outline-none select-none z-20"
+                  sideOffset={8}
+                >
+                  <Select.ScrollUpArrow />
+                  <Select.Popup className="group min-w-(--anchor-width) origin-(--transform-origin) bg-clip-padding bg-black text-neutral-300 shadow-lg shadow-neutral-700 outline outline-neutral-900 data-ending-style:scale-90 data-ending-style:opacity-0 data-[side=none]:min-w-[calc(var(--anchor-width)+1rem)] data-[side=none]:data-ending-style:transition-none data-starting-style:scale-90 data-starting-style:opacity-0 data-side-none:data-starting-style:scale-100 data-side=none:data-starting-style:opacity-100 data-side-none:data-starting-style:transition-none dark:shadow-none dark:outline-neutral-900">
+                    <Select.Arrow />
+                    <Select.List>
+                      {scaleModes.map((item) => (
+                        <Select.Item
+                          className="flex items-center justify-between gap-2 text-xs border-b border-b-solid border-b-neutral-900 p-2"
+                          key={item.label}
+                          value={item.value}
+                        >
+                          <Select.ItemText>{item.label}</Select.ItemText>
+                          <Select.ItemIndicator>
+                            <CheckCircle
+                              weight="Bold"
+                              className="text-accent-500"
+                              size={12}
+                            />
+                          </Select.ItemIndicator>
+                        </Select.Item>
+                      ))}
+                    </Select.List>
+                  </Select.Popup>
+                  <Select.ScrollDownArrow />
+                </Select.Positioner>
+              </Select.Portal>
+            </Select.Root>
+          </Field.Root>
+          <div className="flex items-center justify-between">
+            <p className="text-xs text-neutral-400">Preserve Aspect Ratio:</p>
+            <Checkbox.Root
+              onCheckedChange={() =>
+                console.log('TODO: implement preserve aspect ratio')
+              }
+              defaultChecked={config.preserveAspectRatio}
+              className="flex items-center justify-center focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-accent-800 bg-neutral-800 data-checked:bg-none data-unchecked:border data-unchecked:border-neutral-900"
+            >
+              <Checkbox.Indicator>
+                <CheckCircle
+                  size={20}
+                  weight="BoldDuotone"
+                  className="text-accent-500"
+                />
+              </Checkbox.Indicator>
+            </Checkbox.Root>
           </div>
         </div>
       )}
-
-      <div style={{ display: 'flex', gap: '10px' }}>
-        <button
-          onClick={handleScreenshot}
-          style={{
-            padding: '10px 15px',
-            backgroundColor: '#17a2b8',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            flex: 1,
-          }}
-        >
-          📸 Screenshot
-        </button>
-
-        <button
-          onClick={clearCanvas}
-          style={{
-            padding: '10px 15px',
-            backgroundColor: '#6c757d',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            flex: 1,
-          }}
-        >
-          🧹 Clear
-        </button>
+      <div className="my-1 px-3 py-2 mx-3 gap-4 border border-dotted border-neutral-900">
+        <div className="w-full flex items-center justify-between">
+          <h3 className="font-medium text-sm text-neutral-400">Actions</h3>
+          <Button>
+            <SquareAltArrowDown
+              size={18}
+              weight="Bold"
+              className="text-neutral-500"
+            />
+          </Button>
+        </div>
+        <div className="flex items-center justify-start gap-2 my-2">
+          <Button
+            className="px-2 py-1 border border-solid border-neutral-900 text-xs"
+            onClick={handleScreenshot}
+          >
+            📸 Screenshot
+          </Button>
+          <Button
+            className="px-2 py-1 border border-solid border-neutral-900 text-xs"
+            onClick={clearCanvas}
+          >
+            🧹 Clear
+          </Button>
+        </div>
       </div>
     </div>
   );

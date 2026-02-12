@@ -1,4 +1,6 @@
-import React, { useCallback, useState } from 'react';
+import { TuningSquare } from '@solar-icons/react';
+import type React from 'react';
+import { useCallback, useState } from 'react';
 import * as Types from './canvas/types';
 import { AnimationControls } from './components/AnimationControls';
 import { CanvasRenderer } from './components/CanvasRenderer';
@@ -28,6 +30,12 @@ const sampleImages: Types.ImageSource[] = [
     height: 1080,
     metadata: { category: 'mountains' },
   }),
+  // new Types.ImageSource({
+  //   url: 'https://images.unsplash.com/photo-1770110000509-6c8298224699',
+  //   width: 1920,
+  //   height: 1080,
+  //   metadata: { category: 'nature' },
+  // }),
 ];
 
 // Initial configuration
@@ -47,8 +55,6 @@ const AppContent: React.FC = () => {
   const handleImageSelect = useCallback((image: Types.ImageSource) => {
     console.log('Image selected:', image);
   }, []);
-
-  console.log({ isReady, isLoading });
 
   if (!isReady && isLoading) {
     return (
@@ -75,11 +81,28 @@ const AppContent: React.FC = () => {
   }
 
   return (
-    <div
-      className="app"
-      style={{ padding: '20px', maxWidth: '1400px', margin: '0 auto' }}
-    >
-      <header style={{ marginBottom: '30px' }}>
+    <div className="flex root items-center w-full h-screen overflow-hidden">
+      <div className="w-[75%] h-full border-r border-r-solid border-r-neutral-900 overflow-hidden">
+        <CanvasRenderer className="w-full h-full bg-accent-400" />
+      </div>
+      <div className="w-[25%] h-full flex flex-col items-start justify-start gap-3 overflow-y-scroll">
+        <div className="w-full px-3 py-1 flex items-center justify-between">
+          <h1 className="text-lg font-medium">Controls</h1>
+          <TuningSquare size={22} weight="Bold" className="text-accent-500" />
+        </div>
+        <ImageControls
+          images={selectedImages}
+          onImageSelect={handleImageSelect}
+          showFilters
+          showConfig
+        />
+        <AnimationControls
+          images={selectedImages}
+          onAnimationEnd={() => console.log('animation ended')}
+          onAnimationStart={() => console.log('Animation started')}
+        />
+      </div>
+      {/* <header style={{ marginBottom: '30px' }}>
         <h1>🎨 Effect-TS Canvas Renderer (React)</h1>
         <p>Type-safe canvas rendering with animation and configuration</p>
       </header>
@@ -116,7 +139,6 @@ const AppContent: React.FC = () => {
             showFilters
             showConfig
           />
-
           <AnimationControls
             images={selectedImages.slice(0, 2)}
             onAnimationStart={() => console.log('Animation started')}
@@ -124,7 +146,6 @@ const AppContent: React.FC = () => {
           />
         </div>
       </div>
-
       <div
         style={{
           display: 'grid',
@@ -133,9 +154,7 @@ const AppContent: React.FC = () => {
           marginTop: '30px',
         }}
       >
-        <div
-          className='p-3.75 bg-neutral-100 rounded-md'
-        >
+        <div className="p-3.75 bg-neutral-100 rounded-md">
           <h4>Ready</h4>
           <div>{isReady ? '✅' : '❌'}</div>
         </div>
@@ -161,7 +180,7 @@ const AppContent: React.FC = () => {
           <h4>Error</h4>
           <div>{error ? '❌' : '✅'}</div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
