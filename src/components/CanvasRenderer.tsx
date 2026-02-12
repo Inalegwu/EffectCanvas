@@ -19,7 +19,7 @@ export const CanvasRenderer: React.FC<CanvasRendererProps> = ({
   const { canvasRef, state } = useCanvasRendererContext();
 
   return (
-    <div className="bg-red-100 w-full h-full">
+    <div className="w-full h-full">
       <canvas
         className={className}
         ref={canvasRef}

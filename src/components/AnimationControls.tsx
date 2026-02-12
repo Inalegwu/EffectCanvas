@@ -1,4 +1,5 @@
-import { DangerTriangle } from '@solar-icons/react';
+import { Field, Select, Slider } from '@base-ui/react';
+import { AltArrowDown, CheckCircle, DangerTriangle } from '@solar-icons/react';
 import type React from 'react';
 import { useCallback, useState } from 'react';
 import * as Types from '../canvas/types';
@@ -7,6 +8,11 @@ import { useCanvasRendererContext } from '../contexts/CanvasRendererContext';
 type Easings = {
   label: string;
   value: Types.AnimationConfig['easing'];
+};
+
+type AnimTypes = {
+  label: string;
+  value: Types.AnimationConfig['type'];
 };
 
 interface AnimationControlsProps {
@@ -47,6 +53,33 @@ const easingFunctions: Array<Easings> = [
   {
     label: 'Spring',
     value: 'spring',
+  },
+];
+
+const animationTypes: Array<AnimTypes> = [
+  {
+    label: 'Zoom',
+    value: 'zoom',
+  },
+  {
+    label: 'Slid',
+    value: 'slide',
+  },
+  {
+    label: 'Ken Burns',
+    value: 'kenBurns',
+  },
+  {
+    label: 'Fade',
+    value: 'fade',
+  },
+  {
+    label: 'Dissolve',
+    value: 'dissolve',
+  },
+  {
+    label: 'Cross Fade',
+    value: 'crossfade',
   },
 ];
 
@@ -94,73 +127,163 @@ export const AnimationControls: React.FC<AnimationControlsProps> = ({
     animationControls.queueAnimation(from, to, animationConfig);
   }, [images, animationControls, animationConfig]);
 
+  // onChange={(e) =>
+  //           setAnimationConfig(
+  //             (prev) =>
+  //               new Types.AnimationConfig({
+  //                 ...prev,
+  //                 type: e.target.value as Types.AnimationConfig['type'],
+  //               }),
+  //           )
+  //         }
+
   return (
     <div className="flex flex-col w-full gap-2 overflow-y-scroll pb-2">
       <h3 className="text-neutral-400 text-sm mx-3">Animation Controls</h3>
-      <div className="my-1 px-3 py-2 mx-3 gap-4 border border-dotted border-neutral-900 flex items-center justify-between">
-        <p className="text-xs text-neutral-500">Animation Type</p>
-        <select
-          value={animationConfig.type}
-          onChange={(e) =>
+      <Field.Root className="my-1 px-3 py-2 mx-3 gap-4 border border-dotted border-neutral-900 flex items-center justify-between">
+        <Field.Label className="text-xs text-neutral-500">
+          Animation Type
+        </Field.Label>{' '}
+        <Select.Root
+          onValueChange={(value) =>
             setAnimationConfig(
               (prev) =>
                 new Types.AnimationConfig({
                   ...prev,
-                  type: e.target.value as Types.AnimationConfig['type'],
+                  type: value as Types.AnimationConfig['type'],
                 }),
             )
           }
+          defaultValue={animationConfig.type}
+          items={animationTypes}
+          value={animationConfig.type}
         >
-          <option value="fade">Fade</option>
-          <option value="slide">Slide</option>
-          <option value="zoom">Zoom</option>
-          <option value="crossfade">Crossfade</option>
-          <option value="kenBurns">Ken Burns</option>
-        </select>
-      </div>
-
+          <Select.Trigger className="border gap-3 border-solid border-neutral-900 flex items-center justify-center text-neutral-300 px-3 py-1">
+            <Select.Value
+              className="data-placeholder:opacity-60 text-xs"
+              placeholder="Filter"
+            />
+            <AltArrowDown size={13} />
+          </Select.Trigger>
+          <Select.Portal>
+            <Select.Positioner
+              className="outline-none select-none z-20"
+              sideOffset={8}
+            >
+              <Select.ScrollUpArrow />
+              <Select.Popup className="group min-w-(--anchor-width) origin-(--transform-origin) bg-clip-padding bg-black text-neutral-300 shadow-lg shadow-neutral-700 outline outline-neutral-900 data-ending-style:scale-90 data-ending-style:opacity-0 data-[side=none]:min-w-[calc(var(--anchor-width)+1rem)] data-[side=none]:data-ending-style:transition-none data-starting-style:scale-90 data-starting-style:opacity-0 data-side-none:data-starting-style:scale-100 data-side=none:data-starting-style:opacity-100 data-side-none:data-starting-style:transition-none dark:shadow-none dark:outline-neutral-900">
+                <Select.Arrow />
+                <Select.List>
+                  {animationTypes.map((item) => (
+                    <Select.Item
+                      className="flex items-center justify-between gap-2 text-xs border-b border-b-solid border-b-neutral-900 p-2"
+                      key={item.label}
+                      value={item.value}
+                    >
+                      <Select.ItemText>{item.label}</Select.ItemText>
+                      <Select.ItemIndicator>
+                        <CheckCircle
+                          weight="Bold"
+                          className="text-accent-500"
+                          size={12}
+                        />
+                      </Select.ItemIndicator>
+                    </Select.Item>
+                  ))}
+                </Select.List>
+              </Select.Popup>
+              <Select.ScrollDownArrow />
+            </Select.Positioner>
+          </Select.Portal>
+        </Select.Root>
+      </Field.Root>
       <div className="my-1 px-3 py-2 mx-3 gap-4 border border-dotted border-neutral-900 flex items-center justify-between">
         <p className="text-xs text-neutral-500">
           Duration: {animationConfig.duration}ms
         </p>
-        <input
-          type="range"
-          min="100"
-          max="5000"
-          step="100"
-          value={animationConfig.duration}
-          onChange={(e) =>
+        <Slider.Root
+          defaultValue={animationConfig.duration}
+          onValueChange={(e) =>
             setAnimationConfig(
               (prev) =>
                 new Types.AnimationConfig({
                   ...prev,
-                  duration: parseInt(e.target.value),
+                  duration: e,
                 }),
             )
           }
-        />
-      </div>
-      <div className="my-1 px-3 py-2 mx-3 gap-4 border border-dotted border-neutral-900 flex items-center justify-between">
-        <p className="text-xs text-neutral-500">Easing</p>
-        <select
-          value={animationConfig.easing}
-          onChange={(e) =>
-            setAnimationConfig(
-              (prev) =>
-                new Types.AnimationConfig({
-                  ...prev,
-                  easing: e.target.value as Types.EasingFunction,
-                }),
-            )
-          }
+          className="w-40"
+          min={100}
+          max={5000}
+          step={100}
         >
-          <option value="linear">Linear</option>
-          <option value="easeInQuad">Ease In Quad</option>
-          <option value="easeOutQuad">Ease Out Quad</option>
-          <option value="easeInOutQuad">Ease In/Out Quad</option>
-          <option value="spring">Spring</option>
-        </select>
+          <Slider.Value className="text-xs text-neutral-500 mb-2" />
+          <Slider.Control className="flex w-full touch-none items-center select-none">
+            <Slider.Track className="h-1 w-full bg-neutral-900 shadow-[inset_0_0_0_1px] shadow-neutral-800 select-none">
+              <Slider.Indicator className="bg-neutral-700 select-none" />
+              <Slider.Thumb
+                aria-label="amount"
+                className="size-3 rounded-full bg-white outline outline-gray-300 select-none has-focus-visible:outline has-focus-visible:outline-blue-800"
+              />
+            </Slider.Track>
+          </Slider.Control>
+        </Slider.Root>
       </div>
+      <Field.Root className="my-1 px-3 py-2 mx-3 gap-4 border border-dotted border-neutral-900 flex items-center justify-between">
+        <Field.Label className="text-xs text-neutral-500">Easing</Field.Label>
+        <Select.Root
+          onValueChange={(value) =>
+            setAnimationConfig(
+              (prev) =>
+                new Types.AnimationConfig({
+                  ...prev,
+                  type: value as Types.AnimationConfig['type'],
+                }),
+            )
+          }
+          defaultValue={animationConfig.type}
+          items={easingFunctions}
+          value={animationConfig.type}
+        >
+          <Select.Trigger className="border gap-3 border-solid border-neutral-900 flex items-center justify-center text-neutral-300 px-3 py-1">
+            <Select.Value
+              className="data-placeholder:opacity-60 text-xs"
+              placeholder="Filter"
+            />
+            <AltArrowDown size={13} />
+          </Select.Trigger>
+          <Select.Portal>
+            <Select.Positioner
+              className="outline-none select-none z-20"
+              sideOffset={8}
+            >
+              <Select.ScrollUpArrow />
+              <Select.Popup className="group min-w-(--anchor-width) origin-(--transform-origin) bg-clip-padding bg-black text-neutral-300 shadow-lg shadow-neutral-700 outline outline-neutral-900 data-ending-style:scale-90 data-ending-style:opacity-0 data-[side=none]:min-w-[calc(var(--anchor-width)+1rem)] data-[side=none]:data-ending-style:transition-none data-starting-style:scale-90 data-starting-style:opacity-0 data-side-none:data-starting-style:scale-100 data-side=none:data-starting-style:opacity-100 data-side-none:data-starting-style:transition-none dark:shadow-none dark:outline-neutral-900">
+                <Select.Arrow />
+                <Select.List>
+                  {easingFunctions.map((item) => (
+                    <Select.Item
+                      className="flex items-center justify-between gap-2 text-xs border-b border-b-solid border-b-neutral-900 p-2"
+                      key={item.label}
+                      value={item.value}
+                    >
+                      <Select.ItemText>{item.label}</Select.ItemText>
+                      <Select.ItemIndicator>
+                        <CheckCircle
+                          weight="Bold"
+                          className="text-accent-500"
+                          size={12}
+                        />
+                      </Select.ItemIndicator>
+                    </Select.Item>
+                  ))}
+                </Select.List>
+              </Select.Popup>
+              <Select.ScrollDownArrow />
+            </Select.Positioner>
+          </Select.Portal>
+        </Select.Root>
+      </Field.Root>
       <div className="my-1 px-3 py-2 mx-3 gap-4 border border-dotted border-neutral-900 flex items-center justify-between">
         <p className="text-xs text-neutral-500">Loop Animation</p>
         <input
