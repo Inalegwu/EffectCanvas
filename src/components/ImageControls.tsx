@@ -117,7 +117,7 @@ export const ImageControls: React.FC<ImageControlsProps> = ({
   }, [takeScreenshot]);
 
   return (
-    <div className="flex flex-col w-full h-full gap-2 overflow-hidden">
+    <div className="flex flex-col w-full h-full gap-2 overflow-scroll">
       <div className="my-1 px-3 py-2 mx-3 gap-4 border border-dotted border-neutral-900">
         <div className="w-full flex items-center justify-between">
           <h3 className="font-medium text-sm text-neutral-400">Images</h3>
@@ -148,7 +148,7 @@ export const ImageControls: React.FC<ImageControlsProps> = ({
         </ToggleGroup>
       </div>
       {showFilters && (
-        <Field.Root className="my-1 px-3 py-2 mx-3 gap-4 border border-dotted border-neutral-900 overflow-hidden">
+        <Field.Root className="my-1 px-3 py-2 mx-3 gap-4 border border-dotted border-neutral-900">
           <div className="flex w-full items-center justify-between">
             <Field.Label className="font-medium text-sm text-neutral-400">
               Filters
