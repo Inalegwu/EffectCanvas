@@ -83,7 +83,7 @@ const AppContent: React.FC = () => {
   return (
     <div className="flex root items-center w-full h-screen overflow-hidden">
       <div className="w-[75%] h-full border-r border-r-solid border-r-neutral-900 overflow-hidden">
-        <CanvasRenderer className="w-full h-full bg-accent-400" />
+        <CanvasRenderer className="w-full h-full" />
       </div>
       <div className="w-[25%] h-full flex flex-col items-start justify-start gap-3 overflow-y-scroll">
         <div className="w-full px-3 py-1 flex items-center justify-between">
@@ -102,85 +102,6 @@ const AppContent: React.FC = () => {
           onAnimationStart={() => console.log('Animation started')}
         />
       </div>
-      {/* <header style={{ marginBottom: '30px' }}>
-        <h1>🎨 Effect-TS Canvas Renderer (React)</h1>
-        <p>Type-safe canvas rendering with animation and configuration</p>
-      </header>
-
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 350px',
-          gap: '30px',
-          marginBottom: '30px',
-        }}
-      >
-        <div>
-          <CanvasRenderer
-            className="main-canvas"
-            style={{
-              width: '100%',
-              height: '600px',
-              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-              borderRadius: '8px',
-            }}
-            onClick={(e) => {
-              const rect = e.currentTarget.getBoundingClientRect();
-              const x = e.clientX - rect.left;
-              const y = e.clientY - rect.top;
-              console.log(`Canvas clicked at: ${x}, ${y}`);
-            }}
-          />
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <ImageControls
-            images={selectedImages}
-            onImageSelect={handleImageSelect}
-            showFilters
-            showConfig
-          />
-          <AnimationControls
-            images={selectedImages.slice(0, 2)}
-            onAnimationStart={() => console.log('Animation started')}
-            onAnimationEnd={() => console.log('Animation ended')}
-          />
-        </div>
-      </div>
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: '20px',
-          marginTop: '30px',
-        }}
-      >
-        <div className="p-3.75 bg-neutral-100 rounded-md">
-          <h4>Ready</h4>
-          <div>{isReady ? '✅' : '❌'}</div>
-        </div>
-
-        <div
-          style={{
-            padding: '15px',
-            backgroundColor: '#f8f9fa',
-            borderRadius: '8px',
-          }}
-        >
-          <h4>Loading</h4>
-          <div>{isLoading ? '⏳' : '✅'}</div>
-        </div>
-
-        <div
-          style={{
-            padding: '15px',
-            backgroundColor: '#f8f9fa',
-            borderRadius: '8px',
-          }}
-        >
-          <h4>Error</h4>
-          <div>{error ? '❌' : '✅'}</div>
-        </div>
-      </div> */}
     </div>
   );
 };

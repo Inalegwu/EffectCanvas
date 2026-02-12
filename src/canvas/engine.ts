@@ -65,7 +65,7 @@ const makeCanvasEngine = Effect.gen(function* (_) {
       config: new Types.RendererConfig({
         width: 800,
         height: 600,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#000000',
         preserveAspectRatio: true,
         scaleMode: 'contain',
         filters: [],
