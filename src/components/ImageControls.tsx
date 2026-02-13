@@ -311,13 +311,13 @@ export const ImageControls: React.FC<ImageControlsProps> = ({
                 console.log('TODO: implement preserve aspect ratio')
               }
               defaultChecked={config.preserveAspectRatio}
-              className="flex items-center justify-center focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-accent-800 bg-neutral-800 data-checked:bg-none data-unchecked:border data-unchecked:border-neutral-900"
+              className="flex items-center justify-center focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-accent-800 data-unchecked:border data-unchecked:border-dotted data-unchecked:size-5 data-unchecked:border-neutral-900"
             >
               <Checkbox.Indicator>
                 <CheckCircle
                   size={20}
                   weight="BoldDuotone"
-                  className="text-accent-500"
+                  className="text-accent-200"
                 />
               </Checkbox.Indicator>
             </Checkbox.Root>

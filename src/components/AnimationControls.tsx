@@ -1,4 +1,4 @@
-import { Field, Select, Slider } from '@base-ui/react';
+import { Checkbox, Field, Select, Slider } from '@base-ui/react';
 import { AltArrowDown, CheckCircle, DangerTriangle } from '@solar-icons/react';
 import { AnimatePresence, motion } from 'motion/react';
 import type React from 'react';
@@ -208,7 +208,6 @@ export const AnimationControls: React.FC<AnimationControlsProps> = ({
           max={5000}
           step={100}
         >
-          <Slider.Value className="text-xs text-neutral-500 mb-2" />
           <Slider.Control className="flex w-full touch-none items-center select-none">
             <Slider.Track className="h-1 w-full bg-neutral-900 shadow-[inset_0_0_0_1px] shadow-neutral-800 select-none">
               <Slider.Indicator className="bg-neutral-700 select-none" />
@@ -277,19 +276,27 @@ export const AnimationControls: React.FC<AnimationControlsProps> = ({
       </Field.Root>
       <div className="my-1 px-3 py-2 mx-3 gap-4 border border-dotted border-neutral-900 flex items-center justify-between">
         <p className="text-xs text-neutral-500">Loop Animation</p>
-        <input
-          type="checkbox"
-          checked={animationConfig.loop}
-          onChange={(e) =>
+        <Checkbox.Root
+          onCheckedChange={(value) =>
             setAnimationConfig(
               (prev) =>
                 new Types.AnimationConfig({
                   ...prev,
-                  loop: e.target.checked,
+                  loop: value,
                 }),
             )
           }
-        />
+          defaultChecked={animationConfig.loop}
+          className="flex items-center justify-center focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-accent-800 data-unchecked:border data-unchecked:border-dotted data-unchecked:size-5 data-unchecked:border-neutral-900"
+        >
+          <Checkbox.Indicator>
+            <CheckCircle
+              size={20}
+              weight="BoldDuotone"
+              className="text-accent-200"
+            />
+          </Checkbox.Indicator>
+        </Checkbox.Root>
       </div>
       <div className="my-1 px-3 py-2 mx-3 gap-4 border border-dotted border-neutral-900 flex items-center justify-between">
         <button
