@@ -1,17 +1,18 @@
-import { Button, Checkbox, Slider } from '@base-ui/react';
-import { Field } from '@base-ui/react/field';
-import { Select } from '@base-ui/react/select';
-import { Toggle } from '@base-ui/react/toggle';
-import { ToggleGroup } from '@base-ui/react/toggle-group';
 import {
-  AltArrowDown,
-  CheckCircle,
-  SquareAltArrowDown,
-} from '@solar-icons/react';
+  Button,
+  Checkbox,
+  Field,
+  Select,
+  Slider,
+  Toggle,
+  ToggleGroup,
+} from '@base-ui/react';
+import { AltArrowDown, CheckCircle } from '@solar-icons/react';
 import type React from 'react';
 import { useCallback, useState } from 'react';
 import type * as Types from '../canvas/types';
 import { useCanvasAPI } from '../contexts/CanvasRendererContext';
+import { AnimatedBox } from './atoms';
 
 interface ImageControlsProps {
   images?: Types.ImageSource[];
@@ -117,21 +118,12 @@ export const ImageControls: React.FC<ImageControlsProps> = ({
   }, [takeScreenshot]);
 
   return (
-    <div className="flex flex-col w-full h-full gap-2 overflow-scroll">
-      <div className="my-1 px-3 py-2 mx-3 gap-4 border border-dotted border-neutral-900">
-        <div className="w-full flex items-center justify-between">
-          <h3 className="font-medium text-sm text-neutral-400">Images</h3>
-          <Button>
-            <SquareAltArrowDown
-              size={18}
-              weight="Bold"
-              className="text-neutral-500"
-            />
-          </Button>
-        </div>
+    <div className="flex flex-col w-full gap-2 overflow-scroll">
+      {/* Image controls */}
+      <AnimatedBox title="Images" openHeight="12vh" closedHeight="5.5vh">
         <ToggleGroup
           defaultValue={[currentImage?.url || '']}
-          className="mt-3 mb-1 overflow-x-scroll"
+          className="overflow-x-scroll"
         >
           {images.map((image, index) => (
             <Toggle
@@ -146,21 +138,13 @@ export const ImageControls: React.FC<ImageControlsProps> = ({
             </Toggle>
           ))}
         </ToggleGroup>
-      </div>
+      </AnimatedBox>
+      {/* filter controls */}
       {showFilters && (
-        <Field.Root className="my-1 px-3 py-2 mx-3 gap-4 border border-dotted border-neutral-900">
-          <div className="flex w-full items-center justify-between">
-            <Field.Label className="font-medium text-sm text-neutral-400">
-              Filters
-            </Field.Label>
-            <Button>
-              <SquareAltArrowDown
-                size={18}
-                weight="Bold"
-                className="text-neutral-500"
-              />
-            </Button>
-          </div>
+        <Field.Root
+          render={<AnimatedBox title="Filters" closedHeight="5.5vh" />}
+          className="my-1 px-3 py-2 mx-3 gap-4 border border-dotted border-neutral-900"
+        >
           <div className="flex my-2 items-center gap-4 justify-between w-full">
             <Select.Root
               onValueChange={(value) =>
@@ -243,9 +227,14 @@ export const ImageControls: React.FC<ImageControlsProps> = ({
           </div>
         </Field.Root>
       )}
+      {/* config controls */}
       {showConfig && (
-        <div className="my-1 px-3 py-2 mx-3 gap-4 border border-dotted border-neutral-900">
-          <div className="w-full flex items-center justify-between">
+        <AnimatedBox
+          title="Configuration"
+          closedHeight="5.5vh"
+          openHeight="23vh"
+        >
+          {/* <div className="w-full flex items-center justify-between">
             <h3 className="font-medium text-sm text-neutral-400">
               Configuration
             </h3>
@@ -256,7 +245,7 @@ export const ImageControls: React.FC<ImageControlsProps> = ({
                 className="text-neutral-500"
               />
             </Button>
-          </div>
+          </div> */}
           <div className="flex items-center justify-between my-2">
             <p className="text-xs text-neutral-400">Background Color:</p>
             <input
@@ -333,19 +322,9 @@ export const ImageControls: React.FC<ImageControlsProps> = ({
               </Checkbox.Indicator>
             </Checkbox.Root>
           </div>
-        </div>
+        </AnimatedBox>
       )}
-      <div className="my-1 px-3 py-2 mx-3 gap-4 border border-dotted border-neutral-900">
-        <div className="w-full flex items-center justify-between">
-          <h3 className="font-medium text-sm text-neutral-400">Actions</h3>
-          <Button>
-            <SquareAltArrowDown
-              size={18}
-              weight="Bold"
-              className="text-neutral-500"
-            />
-          </Button>
-        </div>
+      <AnimatedBox title="Actions" closedHeight="5.5vh" openHeight="13vh">
         <div className="flex items-center justify-start gap-2 my-2">
           <Button
             className="px-2 py-1 border border-solid border-neutral-900 text-xs"
@@ -360,7 +339,7 @@ export const ImageControls: React.FC<ImageControlsProps> = ({
             🧹 Clear
           </Button>
         </div>
-      </div>
+      </AnimatedBox>
     </div>
   );
 };

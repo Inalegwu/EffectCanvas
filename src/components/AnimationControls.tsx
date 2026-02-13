@@ -227,13 +227,13 @@ export const AnimationControls: React.FC<AnimationControlsProps> = ({
               (prev) =>
                 new Types.AnimationConfig({
                   ...prev,
-                  type: value as Types.AnimationConfig['type'],
+                  easing: value as Types.AnimationConfig['easing'],
                 }),
             )
           }
-          defaultValue={animationConfig.type}
+          defaultValue={animationConfig.easing}
           items={easingFunctions}
-          value={animationConfig.type}
+          value={animationConfig.easing}
         >
           <Select.Trigger className="border gap-3 border-solid border-neutral-900 flex items-center justify-center text-neutral-300 px-3 py-1">
             <Select.Value

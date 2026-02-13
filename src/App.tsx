@@ -101,13 +101,13 @@ const AppContent: React.FC = () => {
           onAnimationEnd={() => console.log('animation ended')}
           onAnimationStart={() => console.log('Animation started')}
         />
-        <div className="w-full flex items-center justify-end gap-2 px-3 py-1">
+        <div className="w-full flex items-center justify-end gap-2 px-3 py-1 absolute bottom-0 right-0">
           <p className="text-xs text-neutral-800 ">
             Designed and developed by{' '}
             <a
               href="https://ikwueinalegwu.vercel.app"
               target="_blank"
-              className="italic underline underline-offset-1"
+              className="italic underline text-md mx-1 text-accent-300 underline-offset-1 font-stylish"
               rel="noopener"
             >
               Ikwue Inalegwu

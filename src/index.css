@@ -5,8 +5,14 @@
   src: url("./assets/fonts/geist.ttf");
 }
 
+@font-face {
+  font-family: Instrument;
+  src: url("./assets/fonts/instrument.ttf");
+}
+
 @theme {
   --font-display: "Geist", "sans-serif";
+  --font-stylish:"Instrument",'sans-serif';
   --color-accent-50: #d7fff5;
 --color-accent-100: #b1f9e8;
 --color-accent-200: #a3ebda;
