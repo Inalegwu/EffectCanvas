@@ -309,8 +309,6 @@ export const AnimationControls: React.FC<AnimationControlsProps> = ({
       <AnimatePresence>
         {animationControls.animationQueue.length > 0 && (
           <motion.div
-            // initial={{ display: 'none', opacity: 0, height: '0' }}
-            // animate={{ height: '11vh', opacity: 0, display: 'block' }}
             exit={{ height: 0, opacity: 0, display: 'none' }}
             className="my-1 px-3 py-2 mx-3 text-neutral-500 border border-dotted border-neutral-900 flex items-center justify-between gap-2 text-xs"
           >
