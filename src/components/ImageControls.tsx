@@ -192,7 +192,7 @@ export const ImageControls: React.FC<ImageControlsProps> = ({
               </Select.Portal>
             </Select.Root>
             <Slider.Root
-              defaultValue={filterValue}
+              //@ts-expect-error: type narrowing
               onValueChange={(e) => setFilterValue(e)}
               className="w-full"
               min={0}

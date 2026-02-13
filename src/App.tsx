@@ -1,4 +1,4 @@
-import { TuningSquare } from '@solar-icons/react';
+import { InfoCircle, TuningSquare } from '@solar-icons/react';
 import type React from 'react';
 import { useCallback, useState } from 'react';
 import * as Types from './canvas/types';
@@ -82,6 +82,9 @@ const AppContent: React.FC = () => {
 
   return (
     <div className="flex root items-center w-full h-screen overflow-hidden">
+      <div className="absolute z-20 top-2 left-2 text-neutral-900 cursor-pointer backdrop-blur-lg p-1">
+        <InfoCircle size={16} weight="Bold" />
+      </div>
       <div className="w-[75%] h-full border-r border-r-solid border-r-neutral-900 overflow-hidden">
         <CanvasRenderer className="w-full h-full" />
       </div>
