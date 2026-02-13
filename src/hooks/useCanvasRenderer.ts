@@ -24,8 +24,8 @@ export const useCanvasRenderer = (
     isLoading: false,
     error: null,
     config: new Types.RendererConfig({
-      width: 800,
-      height: 600,
+      width: 1920,
+      height: 1080,
       backgroundColor: '#000000',
       preserveAspectRatio: true,
       scaleMode: 'contain',

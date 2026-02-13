@@ -1,5 +1,6 @@
 import { Field, Select, Slider } from '@base-ui/react';
 import { AltArrowDown, CheckCircle, DangerTriangle } from '@solar-icons/react';
+import { AnimatePresence, motion } from 'motion/react';
 import type React from 'react';
 import { useCallback, useState } from 'react';
 import * as Types from '../canvas/types';
@@ -305,20 +306,30 @@ export const AnimationControls: React.FC<AnimationControlsProps> = ({
           Queue Animation
         </button>
       </div>
-      {animationControls.animationQueue.length > 0 && (
-        <div className="my-1 px-3 py-2 mx-3 text-neutral-500 border border-dotted border-neutral-900 flex items-center justify-between gap-2 text-xs">
-          <DangerTriangle size={14} weight="Bold" />
-          <div>
-            Queue: {animationControls.animationQueue.length} animations pending
-          </div>
-          <button
-            className="text-red-700 underline italic underline-offset-1"
-            onClick={animationControls.clearQueue}
+      <AnimatePresence>
+        {animationControls.animationQueue.length > 0 && (
+          <motion.div
+            // initial={{ display: 'none', opacity: 0, height: '0' }}
+            // animate={{ height: '11vh', opacity: 0, display: 'block' }}
+            exit={{ height: 0, opacity: 0, display: 'none' }}
+            className="my-1 px-3 py-2 mx-3 text-neutral-500 border border-dotted border-neutral-900 flex items-center justify-between gap-2 text-xs"
           >
-            Clear Queue
-          </button>
-        </div>
-      )}
+            <div className="flex items-center justify-start gap-2">
+              <DangerTriangle size={14} weight="Bold" />
+              <div>
+                Queue: {animationControls.animationQueue.length} animations
+                pending
+              </div>
+            </div>
+            <button
+              className="text-red-700 underline italic underline-offset-1"
+              onClick={animationControls.clearQueue}
+            >
+              Clear Queue
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

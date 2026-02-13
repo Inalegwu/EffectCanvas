@@ -16,7 +16,7 @@ export default function AnimatedBox({
   openHeight,
   closedHeight,
 }: Props) {
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   console.log({ isExpanded });
 
